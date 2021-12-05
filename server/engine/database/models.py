@@ -298,6 +298,45 @@ def load_data(app, db):
                          region=['EUROPE'], deployment='HOURS',
                          leasingPeriod='DAYS', price=890, currency='USD')
 
+    service11 = Service(providerName='SolarWinds', serviceName='Access Rights Manager',
+                         serviceHash='hash10',
+                         imageName='solarwinds.png',
+                         description='SolarWinds provides a solution for the Access Rights Management (ARM) in Microsoft and virtual server environments '
+                                    'which protects companies against unauthorized access to sensitive data. 8MAN‘s key functions are permission' 
+                                    'analysis, security monitoring, documentation and reporting, role & key process optimization, and user provisioning. ' 
+                                    'Developed in Germany by Protected Networks this software solution sets the standards for professional '
+                                    'network security and agile IT organization. It also offers state-of-the-art functionality while fulfilling '
+                                    'established security and compliance guidelines.',
+                         type=['PROACTIVE'], features=['DATA BREACH'],
+                         region=['EUROPE'], deployment='HOURS',
+                         leasingPeriod='MONTHS', price=1496, currency='USD')
+
+    service12 = Service(providerName='Sophos', serviceName='Sophos Network Antivirus Protection',
+                         serviceHash='hash11',
+                         imageName='sophos.png',
+                         description='Sophos antivirus protection for networks is built to stop ransomware, viruses, and advanced '
+                                    'malware attacks in their tracks. Combining the industry\'s leading malware detection with ' 
+                                    'endpoint detection and response (EDR), Sophos will future-proof your organization against ' 
+                                    'both new and old threats. EDR enables you to take threat hunting to the next level, detecting '
+                                    'and investigating suspicious activity with AI-driven and expert analysis. Stay ahead of the '
+                                    'latest threats without adding headcount.',
+                         type=['PROACTIVE'], features=['RANSOMWARE', 'VIRUS', 'MALWARE'],
+                         region=['EUROPE'], deployment='HOURS',
+                         leasingPeriod='MONTHS', price=1300, currency='USD')
+
+    service13 = Service(providerName='Allot', serviceName='Network Secure',
+                         serviceHash='hash12',
+                         imageName='allot.png',
+                         description='Users of mobile networks require protection from malware, phishing '
+                                    'and other cyberattacks more than ever. It is no surprise that ' 
+                                    'consumer concern is high. Service providers who attempted to ' 
+                                    'address the issue with client-based security discovered that '
+                                    'consumers didn’t buy-in and the adoption rates were low because '
+                                    'hey want a simple, transparent, zero-touch service that only a network-based service can deliver.',
+                         type=['PROACTIVE'], features=['MALWARE', 'PHISHING', 'SPYWARE', 'BOTNET'],
+                         region=['EUROPE'], deployment='DAYS',
+                         leasingPeriod='MONTHS', price=1500, currency='USD')
+
 
     review1 = Review(service_id=9, fileName='fingerprint.json', fileData=bytearray(), rating=1, comment="Comment#1")
     review2 = Review(service_id=9, fileName='fingerprint.json', fileData=bytearray(), rating=1, comment="Comment#2")
@@ -317,6 +356,9 @@ def load_data(app, db):
     set_image(service8)
     set_image(service9)
     set_image(service10)
+    set_image(service11)
+    set_image(service12)
+    set_image(service13)
 
 
 def set_image(service):
