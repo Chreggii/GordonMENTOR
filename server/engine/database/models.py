@@ -54,6 +54,7 @@ class Service(db.Model):
     price = db.Column(db.Integer, nullable=False)
     currency = db.Column(db.Text, nullable=False, default='USD')
     reviews = db.relationship('Review', backref="service", lazy='dynamic')
+    mitigationRate = db.Column(db.Integer, nullable=True)
     __tablename__ = 'service'
 
     def serialize(self, cosine_similarity='', jaccard_similarity='', euclidean_distance='', manhattan_distance='',pearson_correlation='', minkowski_distance='', weighted_similarity=[]):
@@ -80,7 +81,8 @@ class Service(db.Model):
             'manhattanDistance': manhattan_distance,
             'pearsonCorrelation': pearson_correlation,
             'minkowskiDistance': minkowski_distance,
-            'weightedSimilarity': weighted_similarity
+            'weightedSimilarity': weighted_similarity,
+            'mitigationRate': self.mitigationRate
         }
 
     def json_to_obj(self, json):
@@ -97,6 +99,7 @@ class Service(db.Model):
         self.price = json["price"]
         self.txHash = json["txHash"]
         self.serviceHash = json["serviceHash"]
+        self.mitigationRate = json['mitigationRate']
         return self
 
     def form_to_obj(self, form, file):
@@ -112,10 +115,11 @@ class Service(db.Model):
         self.price = form["price"]
         self.txHash = form["txHash"]
         self.serviceHash = form["serviceHash"]
+        self.mitigationRate = form['mitigationRate']
         return self
 
     def __repr__(self):
-        return f"Service('{self.serviceName}', '{self.type}', '{self.region}', '{self.price}', '{self.currency}', '{self.txHash}', '{self.serviceHash}')"
+        return f"Service('{self.serviceName}', '{self.type}', '{self.region}', '{self.price}', '{self.currency}', '{self.txHash}', '{self.serviceHash}', '{self.mitigationRate}')"
 
 
 class ServiceImage(db.Model, Image):
@@ -186,7 +190,7 @@ def load_data(app, db):
                                     'organizations respond to the latest threats',
                         type=['PROACTIVE'], features=['VOLUMETRIC', 'PROTOCOL', 'APPLICATION LAYER', 'SSL', 'DNS'],
                         region=['NORTH AMERICA', 'SOUTH AMERICA', 'EUROPE'], deployment='SECONDS',
-                        leasingPeriod='MINUTES', price=3500, currency='USD')
+                        leasingPeriod='MINUTES', price=3500, currency='USD', mitigationRate=0.7)
 
     service2 = Service(providerName='CloudFlare', serviceName='Advanced DDoS Attack Protection',
                         serviceHash='hash2',
@@ -197,7 +201,7 @@ def load_data(app, db):
                                     'and ICMP protocols, as well as SYN/ACK, DNS amplification and Layer 7 attacks',
                         type=['PROACTIVE'], features=['VOLUMETRIC', 'PROTOCOL', 'APPLICATION', 'DNS'],
                         region=['NORTH AMERICA', 'SOUTH AMERICA', 'EUROPE'], deployment='SECONDS',
-                        leasingPeriod='MONTHS', price=4900, currency='USD')
+                        leasingPeriod='MONTHS', price=4900, currency='USD', mitigationRate=0.8)
 
     service3 = Service(providerName='Imperva', serviceName='Incapsula',
                         serviceHash='hash3',
@@ -209,7 +213,7 @@ def load_data(app, db):
                                     'data centers.',
                         type=['PROACTIVE'], features=['VOLUMETRIC', 'PROTOCOL', 'APPLICATION', 'SSL', 'DNS'],
                         region=['NORTH AMERICA', 'SOUTH AMERICA', 'EUROPE'], deployment='SECONDS',
-                        leasingPeriod='DAYS', price=4500, currency='USD')
+                        leasingPeriod='DAYS', price=4500, currency='USD', mitigationRate=0.7)
 
     service4 = Service(providerName='Verisign', serviceName='Verisign DDoS Protection Service',
                         serviceHash='hash4',
@@ -221,7 +225,7 @@ def load_data(app, db):
                                     'the organisational network or in the cloud',
                         type=['PROACTIVE'], features=['VOLUMETRIC', 'PROTOCOL', 'APPLICATION', 'SSL', 'DNS'],
                         region=['NORTH AMERICA', 'SOUTH AMERICA', 'EUROPE'], deployment='SECONDS',
-                        leasingPeriod='MONTHS', price=3700, currency='USD')
+                        leasingPeriod='MONTHS', price=3700, currency='USD', mitigationRate=0.8)
 
     service5 = Service(providerName='Arbor Networks', serviceName='Arbor Cloud',
                         serviceHash='hash5',
@@ -230,7 +234,7 @@ def load_data(app, db):
                                     'mitigation, together with the most widely deployed DDoS protection technology',
                         type=['PROACTIVE'], features=['VOLUMETRIC', 'PROTOCOL', 'APPLICATION' 'SSL', 'DNS'],
                         region=['NORTH AMERICA', 'SOUTH AMERICA', 'EUROPE'], deployment='DAYS',
-                        leasingPeriod='MONTHS', price=3000, currency='USD')
+                        leasingPeriod='MONTHS', price=3000, currency='USD', mitigationRate=0.7)
 
     service6 = Service(providerName='Check Point Software Technologies', serviceName='DDos Protector',
                         serviceHash='hash6',
@@ -244,7 +248,7 @@ def load_data(app, db):
                                     'before they cause damage.',
                         type=['REACTIVE'], features=['APPLICATION', 'DNS'],
                         region=['NORTH AMERICA', 'SOUTH AMERICA', 'EUROPE', 'ASIA'], deployment='SECONDS',
-                        leasingPeriod='DAYS', price=2400, currency='USD')
+                        leasingPeriod='DAYS', price=2400, currency='USD', mitigationRate=0.8)
 
     service7 = Service(providerName='Corero Network Security, Inc.', serviceName='SmartWall® Threat Defense System',
                         serviceHash='hash7',
@@ -258,7 +262,7 @@ def load_data(app, db):
                                     'remain online, continuously, even whilst under attack',
                         type=['REACTIVE'], features=['APPLICATION', 'VOLUMETRIC'],
                         region=['NORTH AMERICA', 'SOUTH AMERICA', 'EUROPE', 'ASIA'], deployment='SECONDS',
-                        leasingPeriod='MINUTES', price=3200, currency='USD')
+                        leasingPeriod='MINUTES', price=3200, currency='USD', mitigationRate=0.7)
 
     service8 = Service(providerName='Flowmon Networks', serviceName='Flowmon DDoS Defender',
                         serviceHash='hash8',
@@ -269,7 +273,7 @@ def load_data(app, db):
                                     'protection',
                         type=['REACTIVE'], features=['APPLICATION'],
                         region=['NORTH AMERICA', 'SOUTH AMERICA', 'EUROPE', 'ASIA'], deployment='SECONDS',
-                        leasingPeriod='MONTHS', price=2345, currency='USD')
+                        leasingPeriod='MONTHS', price=2345, currency='USD', mitigationRate=0.8)
 
     service9 = Service(providerName='Level 3 Communications', serviceName='Level 3 DDos Mitigation',
                         serviceHash='0x2986e65b3fe5edb46392c2685c7f45ef50b6d653781d7c1d6b12c06c920b81b3', txHash='0x693f91c947d546e97ba11525d8bd5ee3d2ce5c400835e2a939662feb3753b6c3',
@@ -283,7 +287,7 @@ def load_data(app, db):
                                     'ensure business-as-usual for employees, partners and customers.',
                         type=['REACTIVE'], features=['APPLICATION', 'VOLUMETRIC'],
                         region=['EUROPE'], deployment='MINUTES',
-                        leasingPeriod='DAYS', price=1200, currency='USD')
+                        leasingPeriod='DAYS', price=1200, currency='USD', mitigationRate=0.7)
 
     service10 = Service(providerName='F5 Networks', serviceName='F5 Silverline DDoS Protection',
                          serviceHash='hash9',
@@ -296,7 +300,7 @@ def load_data(app, db):
                                     'demanding conditions',
                          type=['REACTIVE'], features=['APPLICATION', 'VOLUMETRIC'],
                          region=['EUROPE'], deployment='HOURS',
-                         leasingPeriod='DAYS', price=890, currency='USD')
+                         leasingPeriod='DAYS', price=890, currency='USD', mitigationRate=0.8)
 
     service11 = Service(providerName='SolarWinds', serviceName='Access Rights Manager',
                          serviceHash='hash10',
@@ -309,7 +313,7 @@ def load_data(app, db):
                                     'established security and compliance guidelines.',
                          type=['PROACTIVE'], features=['DATA BREACH'],
                          region=['EUROPE'], deployment='HOURS',
-                         leasingPeriod='MONTHS', price=1496, currency='USD')
+                         leasingPeriod='MONTHS', price=1496, currency='USD', mitigationRate=0.7)
 
     service12 = Service(providerName='Sophos', serviceName='Sophos Network Antivirus Protection',
                          serviceHash='hash11',
@@ -322,7 +326,7 @@ def load_data(app, db):
                                     'latest threats without adding headcount.',
                          type=['PROACTIVE'], features=['RANSOMWARE', 'VIRUS', 'MALWARE'],
                          region=['EUROPE'], deployment='HOURS',
-                         leasingPeriod='MONTHS', price=1300, currency='USD')
+                         leasingPeriod='MONTHS', price=1300, currency='USD', mitigationRate=0.6)
 
     service13 = Service(providerName='Allot', serviceName='Network Secure',
                          serviceHash='hash12',
@@ -335,7 +339,29 @@ def load_data(app, db):
                                     'hey want a simple, transparent, zero-touch service that only a network-based service can deliver.',
                          type=['PROACTIVE'], features=['MALWARE', 'PHISHING', 'SPYWARE', 'BOTNET'],
                          region=['EUROPE'], deployment='DAYS',
-                         leasingPeriod='MONTHS', price=1500, currency='USD')
+                         leasingPeriod='MONTHS', price=1500, currency='USD', mitigationRate=0.8)
+
+    service14 = Service(providerName='Actifio', serviceName='Actifio GO',
+                         serviceHash='hash13',
+                         imageName='actifio.png',
+                         description='Actifio GO is a Google Cloud backup and disaster recovery offering which '
+                                    'enables powerful data protection for Google Cloud and hybrid workloads. ' 
+                                    'Actifio GO supports Google workloads such as Compute Engine and VMware Engine, ' 
+                                    'as well as hybrid workloads like VMware, SAP HANA, Oracle and SQL Server, and others.',
+                         type=['PROACTIVE'], features=['DATA BREACH'],
+                         region=['NORTH AMERICA', 'EUROPE', 'ASIA'], deployment='DAYS',
+                         leasingPeriod='MONTHS', price=1600, currency='USD', mitigationRate=0.7)
+
+    service15 = Service(providerName='Portwell', serviceName='Anti-Spam, Virus, Spyware',
+                         serviceHash='hash14',
+                         imageName='portwell.png',
+                         description='Implemented on Secure Web Gateways (SWG), a gateway appliance, to scan all '
+                                    'incoming network data and prevent malware threats.' 
+                                    'For anti-malware, Portwell has desktop appliances with PoE and performance with ' 
+                                    'Intel Atom® SoC.',
+                         type=['PROACTIVE'], features=['MALWARE', 'RANSOMWARE', 'VIRUS', 'SPYWARE'],
+                         region=['NORTH AMERICA', 'EUROPE', 'ASIA'], deployment='DAYS',
+                         leasingPeriod='MONTHS', price=820, currency='USD', mitigationRate=0.8)
 
 
     review1 = Review(service_id=9, fileName='fingerprint.json', fileData=bytearray(), rating=1, comment="Comment#1")
@@ -359,6 +385,8 @@ def load_data(app, db):
     set_image(service11)
     set_image(service12)
     set_image(service13)
+    set_image(service14)
+    set_image(service15)
 
 
 def set_image(service):
